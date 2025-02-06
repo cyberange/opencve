@@ -31,22 +31,19 @@ add-config-files() {
     _RELEASE=$1
     _MAJOR_VERSION=${_RELEASE:0:2}
 
-    printf "\n--------| %s\n" "Find the release to install"
-    if [[ $_RELEASE == "latest" ]] ; then
-        if [ ! -d "../.git" ]; then
-            printf "%s\n" "Not a git repository, we setup the release to master branch"
-            _RELEASE="master"
-        else
-            _RELEASE=`git describe --tags --abbrev=0`
-            display-and-exec "checking out $_RELEASE" "git checkout -B $_RELEASE"
-        fi
-    elif [[ $_MAJOR_VERSION =~ ^[v0-1|0-1.]+$ ]] ; then
-        printf "%s\n" "ERROR: this script works only for release >= 2.0.0, release given: $_RELEASE"
-        exit 1
-    else
-        display-and-exec "checking out $_RELEASE" "git checkout -B $_RELEASE"
-    fi
+printf "\n--------| %s\n" "Find the release to install"
 
+# Always use the 'master' branch since no releases exist
+if [ ! -d "../.git" ]; then
+    printf "%s\n" "Not a git repository, using the master branch"
+    _RELEASE="master"
+else
+    _RELEASE="master"
+    printf "Using branch: %s\n" "$_RELEASE"
+fi
+
+# Checkout the master branch
+display-and-exec "checking out $_RELEASE" "git checkout $_RELEASE"
     printf "\n--------| %s\n" "Airflow configuration"
     display-and-exec "copying airflow config file" "cp ../scheduler/airflow.cfg.example ../scheduler/airflow.cfg"
     _START_DATE=$(date '+%Y-%m-%d')
