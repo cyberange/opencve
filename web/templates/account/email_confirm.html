@@ -12,7 +12,7 @@
 {% if confirmation %}
     {% user_display confirmation.email_address.user as user_display %}
     {% if can_confirm %}
-        Click on this link to confirm the OpenCVE account of <strong>{{ user_display }}</strong> (<a href="mailto:{{ email }}">{{ email }}</a>).
+        Click on this link to confirm the CVE alerts  account of <strong>{{ user_display }}</strong> (<a href="mailto:{{ email }}">{{ email }}</a>).
 
         {% url 'account_confirm_email' confirmation.key as action_url %}
         {% element form method="post" action=action_url %}

@@ -19,7 +19,7 @@ class OnboardingFormView(LoginRequiredMixin, SuccessMessageMixin, FormView):
     form_class = OnboardingForm
     success_url = reverse_lazy("home")
     success_message = (
-        "Welcome to OpenCVE! You can now subscribe to "
+        "Welcome to CVE Alerts ! You can now subscribe to "
         "vendors or products to start tracking their CVEs "
         "and stay updated on vulnerabilities."
     )
