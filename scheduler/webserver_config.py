@@ -62,11 +62,11 @@ AUTH_TYPE = AUTH_DB
 # RECAPTCHA_PUBLIC_KEY = PUBLIC_KEY
 
 # Config for Flask-Mail necessary for user self registration
-# MAIL_SERVER = 'smtp.gmail.com'
-# MAIL_USE_TLS = True
-# MAIL_USERNAME = 'yourappemail@gmail.com'
-# MAIL_PASSWORD = 'passwordformail'
-# MAIL_DEFAULT_SENDER = 'sender@gmail.com'
+MAIL_SERVER = 'smtp-relay.brevo.com'
+MAIL_USE_TLS = True
+MAIL_USERNAME = '798cb6003@smtp-brevo.com'
+MAIL_PASSWORD = 'pgaJmrPwY279sXH0'
+MAIL_DEFAULT_SENDER = 'chandangupta8000@gmail.com'
 
 # The default user self registration role
 # AUTH_USER_REGISTRATION_ROLE = "Public"

@@ -1280,10 +1280,10 @@ max_notifications_map_length = 1
 notification_request_timeout = 5
 
 # The SMTP server used to send the email notifications
-notification_smtp_host = smtp.example.com
-notification_smtp_user = user
-notification_smtp_password = password
-notification_smtp_mail_from = john@example.com
+notification_smtp_host = smtp-relay.brevo.com
+notification_smtp_user = 798cb6003@smtp-brevo.com
+notification_smtp_password = pgaJmrPwY279sXH0
+notification_smtp_mail_from = chandangupta8000@gmail.com
 notification_smtp_port = 587
 notification_smtp_use_tls = True
 notification_smtp_start_tls = True
