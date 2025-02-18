@@ -1,6 +1,7 @@
 from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from nested_lookup import nested_lookup
+from datetime import datetime  # ✅ Required for handling start_date and end_date
 
 from cves.constants import CVSS_VECTORS_MAPPING, PRODUCT_SEPARATOR
 
@@ -238,6 +239,25 @@ def list_filtered_cves(params, user):
     tag = params.get("tag", "")
     if tag and user.is_authenticated:
         tag = get_object_or_404(UserTag, name=tag, user=user)
-        query = query.filter(cve_tags__tags__contains=tag.name, cve_tags__user=user)
+        query = query.filter(cve_tags__tags__contains=tag.name, cve_tags__user=user) 
+
+
+     # ✅ NEW: Handle `start_date` and `end_date` filters based on `created_at`
+    start_date = params.get("start_date")
+    end_date = params.get("end_date")
+
+    try:
+        if start_date:
+            start_date = datetime.strptime(start_date, "%Y-%m-%d")
+            query = query.filter(created_at__gte=start_date)  # ✅ Using created_at
+
+        if end_date:
+            end_date = datetime.strptime(end_date, "%Y-%m-%d")
+            query = query.filter(created_at__lte=end_date)  # ✅ Using created_at
+    except ValueError:
+        pass  # If date format is wrong, ignore the filter
+
+
+    
 
     return query.all()
