@@ -176,6 +176,10 @@ def list_filtered_cves(params, user):
 
     query = Cve.objects.order_by("-updated_at")
 
+    # ✅ Debugging: Print received query parameters
+    print("🔍 Query Parameters:", params)
+
+
     search = params.get("search")
     if search:
         query = query.filter(
@@ -242,20 +246,25 @@ def list_filtered_cves(params, user):
         query = query.filter(cve_tags__tags__contains=tag.name, cve_tags__user=user) 
 
 
-     # ✅ NEW: Handle `start_date` and `end_date` filters based on `created_at`
+  # ✅ Extract and debug start_date and end_date
     start_date = params.get("start_date")
     end_date = params.get("end_date")
 
     try:
         if start_date:
             start_date = datetime.strptime(start_date, "%Y-%m-%d")
-            query = query.filter(created_at__gte=start_date)  # ✅ Using created_at
+            query = query.filter(created_at__exact=start_date)  # ✅ Exact date match
+            print(f"✅ Filtering by exact start_date: {start_date}")
 
         if end_date:
             end_date = datetime.strptime(end_date, "%Y-%m-%d")
-            query = query.filter(created_at__lte=end_date)  # ✅ Using created_at
-    except ValueError:
-        pass  # If date format is wrong, ignore the filter
+            query = query.filter(created_at__exact=end_date)  # ✅ Exact date match
+            print(f"✅ Filtering by exact end_date: {end_date}")
+
+    except ValueError as e:
+        print(f"❌ Invalid date format: {e}")
+
+    print("🔍 Final Query:", query.query)  # ✅ Show the SQL query being executed
 
 
     
