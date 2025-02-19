@@ -2,6 +2,8 @@ from django.db.models import Q
 from django.shortcuts import get_object_or_404
 from nested_lookup import nested_lookup
 from datetime import datetime  # ✅ Required for handling start_date and end_date
+from django.utils.timezone import make_aware
+import pytz
 
 from cves.constants import CVSS_VECTORS_MAPPING, PRODUCT_SEPARATOR
 
