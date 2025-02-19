@@ -176,8 +176,7 @@ def list_filtered_cves(params, user):
 
     query = Cve.objects.order_by("-updated_at")
 
-    # ✅ Debugging: Print received query parameters
-    print("🔍 Query Parameters:", params)
+
 
 
     search = params.get("search")
@@ -246,27 +245,40 @@ def list_filtered_cves(params, user):
         query = query.filter(cve_tags__tags__contains=tag.name, cve_tags__user=user) 
 
 
-  # ✅ Extract and debug start_date and end_date
+
+
+    print("🔍 Query Parameters:", params)  # ✅ Debugging: Show received parameters
+
+    # ✅ Get today's date (timezone-aware)
+    today_date = datetime.now(pytz.UTC).date()
+
+    # ✅ Extract and sanitize date parameters
     start_date = params.get("start_date")
     end_date = params.get("end_date")
 
     try:
         if start_date:
-            start_date = datetime.strptime(start_date, "%Y-%m-%d")
-            query = query.filter(created_at__exact=start_date)  # ✅ Exact date match
-            print(f"✅ Filtering by exact start_date: {start_date}")
+            start_date = datetime.strptime(start_date.strip(), "%Y-%m-%d")  # ✅ Remove extra spaces
+            start_date = make_aware(start_date, pytz.UTC).date()  # ✅ Convert to timezone-aware date
+            query = query.filter(created_at__date__gte=start_date)  # ✅ Show from start_date to today
+            print(f"✅ Filtering from {start_date} to today ({today_date})")
 
         if end_date:
-            end_date = datetime.strptime(end_date, "%Y-%m-%d")
-            query = query.filter(created_at__exact=end_date)  # ✅ Exact date match
-            print(f"✅ Filtering by exact end_date: {end_date}")
+            end_date = datetime.strptime(end_date.strip(), "%Y-%m-%d")  # ✅ Remove extra spaces
+            end_date = make_aware(end_date, pytz.UTC).date()  # ✅ Convert to timezone-aware date
+            query = query.filter(created_at__date__lte=end_date)  # ✅ Show from beginning to end_date
+            print(f"✅ Filtering from beginning to {end_date}")
+
+        if start_date and end_date:
+            query = query.filter(created_at__date__gte=start_date, created_at__date__lte=end_date)  # ✅ Show only in range
+            print(f"✅ Filtering between {start_date} and {end_date}")
 
     except ValueError as e:
         print(f"❌ Invalid date format: {e}")
 
-    print("🔍 Final Query:", query.query)  # ✅ Show the SQL query being executed
+    print("🔍 Final Query:", query.query)  # ✅ Debugging: Print SQL Query
+    return query.all()  # ✅ Actual database call happens here
+
 
 
     
-
-    return query.all()

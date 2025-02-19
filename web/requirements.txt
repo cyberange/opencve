@@ -21,3 +21,6 @@ psycopg2-binary==2.9.10
 gunicorn==23.0.0
 sentry-sdk==2.19.2
 pyparsing==3.2.1
+pytz>=2023.3
+psycopg2-binary>=2.9
+
