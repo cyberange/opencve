@@ -3,3 +3,14 @@ This file is used to override the `opencve/conf/base.py` settings.
 """
 
 from opencve.conf.base import *  # noqa # pylint: disable=unused-import
+
+# Email backend
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+EMAIL_HOST = "smtp-relay.brevo.com"
+EMAIL_HOST_USER = "798cb6003@smtp-brevo.com"
+EMAIL_HOST_PASSWORD = "pgaJmrPwY279sXH0"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+DEFAULT_FROM_EMAIL = "Cve alerts <no-reply@cvealerts.io>"
