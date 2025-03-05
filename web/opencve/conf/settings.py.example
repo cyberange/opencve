@@ -11,6 +11,6 @@ EMAIL_HOST = "smtp-relay.brevo.com"
 EMAIL_HOST_USER = "798cb6003@smtp-brevo.com"
 EMAIL_HOST_PASSWORD = "pgaJmrPwY279sXH0"
 EMAIL_PORT = 587
-EMAIL_USE_TLS = False
+EMAIL_USE_TLS = True
 
-DEFAULT_FROM_EMAIL = "Cve alerts <no-reply@cvealerts.io>"
+DEFAULT_FROM_EMAIL = "Chandan Gupta <chandangupta8000@gmail.com>"
