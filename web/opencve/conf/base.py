@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "organizations",
     "projects",
     "users",
+    "django_ratelimit",  # Added here
 ]
 
 MIDDLEWARE = [
