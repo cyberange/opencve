@@ -14,7 +14,7 @@ class ApiRateLimitMiddleware:
             # Check if the request exceeds the rate limit
             limited = is_ratelimited(
                 request=request,
-                group=None,
+                group="api",  # Define a unique group for API rate limiting
                 key='ip',
                 rate='2/m',  # 2 requests per minute
                 method=['GET', 'POST'],  # Add methods you want to limit
