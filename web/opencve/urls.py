@@ -65,15 +65,14 @@ api_resolver = URLResolver(r'^', api_urlpatterns)
 @ratelimit(key="ip", rate="2/m", method="GET", block=True)
 def api_dispatcher(request, *args, **kwargs):
     """
-    A dispatcher view for /api/ that applies rate limiting.
-    It removes the /api prefix and dispatches to the proper view.
+    Dispatcher view for /api/ that applies rate limiting.
+    It removes the /api prefix, strips any leading slash, and dispatches to the appropriate API view.
     """
-    # Remove the '/api' prefix from the incoming request's path.
-    # If request.path_info is exactly "/api" or "/api/", we use an empty string.
+    # Remove the '/api' prefix
     relative_path = request.path_info[len('/api'):]
-    if not relative_path.startswith('/'):
-        relative_path = '/' + relative_path
-
+    # Strip the leading slash, as the resolver expects a relative path
+    relative_path = relative_path.lstrip('/')
+    
     try:
         match = api_resolver.resolve(relative_path)
         return match.func(request, *match.args, **match.kwargs)
@@ -94,7 +93,7 @@ urlpatterns = [
     path("settings/", include("users.urls")),
     path("admin/", admin.site.urls),
     path("hijack/", include("hijack.urls")),
-    # API routes: all /api/ endpoints are dispatched through api_dispatcher
+    # API routes: all /api/ endpoints are dispatched via api_dispatcher (which is rate-limited)
     path("api/", api_dispatcher),
 ]
 
