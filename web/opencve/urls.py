@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import include, path
 from rest_framework_nested import routers
+from django_ratelimit.decorators import ratelimit
 
 from cves.resources import (
     CveViewSet,
@@ -48,6 +49,19 @@ products_cves_router = routers.NestedSimpleRouter(
 products_cves_router.register(f"cve", ProductCveViewSet, basename="product-cves")
 
 
+@ratelimit(key="ip", rate="2/m", method="GET", block=True)
+def api_root(request, *args, **kwargs):
+    # Include all API routes
+    return include([
+        path("", include(router.urls)),
+        path("", include(organizations_router.urls)),
+        path("", include(projects_cves_router.urls)),
+        path("", include(vendors_router.urls)),
+        path("", include(products_cves_router.urls)),
+        path("", include(weaknesses_router.urls)),
+    ])(request, *args, **kwargs)
+
+
 urlpatterns = [
     path("__debug__/", include("debug_toolbar.urls")),
     path("", include("changes.urls")),
@@ -63,12 +77,8 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("hijack/", include("hijack.urls")),
     # API routes
-    path("api/", include(router.urls)),
-    path("api/", include(organizations_router.urls)),
-    path("api/", include(projects_cves_router.urls)),
-    path("api/", include(vendors_router.urls)),
-    path("api/", include(products_cves_router.urls)),
-    path("api/", include(weaknesses_router.urls)),
+    # Apply rate limiting to /api/
+    path("api/", api_root),
 ]
 
 # Custom errors
