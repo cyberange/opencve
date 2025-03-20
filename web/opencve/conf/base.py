@@ -251,3 +251,14 @@ ENABLE_ONBOARDING = True
 
 # Maximum number of fields to allow in a CVE Advanced Search query
 CVES_ADVANCED_SEARCH_MAX_FIELDS = 5
+
+# Caching for django ratelimiter 
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://redis:6379/1",  # Use the Redis service name and port
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    }
+}
