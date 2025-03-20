@@ -67,6 +67,7 @@ MIDDLEWARE = [
     "organizations.middlewares.OrganizationMiddleware",
     "auditlog.middleware.AuditlogMiddleware",
     "django_prometheus.middleware.PrometheusAfterMiddleware",
+    "opencve.middleware.ApiRateLimitMiddleware",  # Add your custom middleware here
 ]
 
 ROOT_URLCONF = "opencve.urls"
